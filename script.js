@@ -14,10 +14,9 @@ let rows = [
     {city:'Sydney', population:'52,00,000', country:'Australia', zipcode:'2000'}
 ];
 
-let options = {
-    container:document.getElementById("mygrid"),
+let data = {
     columnDefs:columnDefs,
     rowData:rows
 }
 
-new ABGrid(options);
+document.querySelector('ab-grid').data = data;
