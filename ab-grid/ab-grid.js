@@ -5,7 +5,6 @@ class ABGrid extends HTMLElement{
         this.shadow = this.attachShadow({mode:'open'}); 
     }
 
-
     set data(data){
         this._data = data;        
         this.render();
@@ -41,6 +40,7 @@ class ABGrid extends HTMLElement{
 
     renderColumns(){
         let tHead = this.shadow.querySelector('table thead');
+        tHead.innerHTML = "";
         let tHeadTr = document.createElement('tr');
         tHead.append(tHeadTr);
         this.data.columnDefs.forEach(column => {
@@ -53,6 +53,7 @@ class ABGrid extends HTMLElement{
 
     renderRows(){
         let tBody = this.shadow.querySelector('table tbody');
+        tBody.innerHTML = "";
         this.data.rowData.forEach(row => {
             let tr = document.createElement('tr');
             this.data.columnDefs.forEach((column) => {
