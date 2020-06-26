@@ -3,12 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Datatable Grid</title>
-    <script type="module" src="ab-grid/ab-grid.js" defer></script>
-    <script type="text/javascript" src="script.js" defer></script>
+    <title>Data Grid Demo</title>
+    <style>
+        body{
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;            
+        }
+
+        h1{
+            color:white;
+            text-align: center;
+            padding: 30px;
+            background-color: teal;
+        }
+
+        ab-grid{
+            max-width:800px;
+            display: block;
+            margin:0px auto;  
+            
+        }
+
+     </style>
+    <script type="module" src="script.js" defer></script>
 </head>
 <body>
-    <h1>Datatable Grid</h1>
-    <ab-grid style="width: 50%;"></ab-grid>
+    <h1>Data Grid Demo</h1>
+    <div>
+        <ab-grid></ab-grid>
+    </div>
 </body>
 </html>

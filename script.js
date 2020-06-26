@@ -1,3 +1,5 @@
+import ABGrid from './ab-grid/ab-grid.js';
+
 let columnDefs = [
     {label:'City', field:'city'},
     {label:'Population', field:'population'},
@@ -18,5 +20,6 @@ let data = {
     columnDefs:columnDefs,
     rowData:rows
 }
+
 
 document.querySelector('ab-grid').data = data;
