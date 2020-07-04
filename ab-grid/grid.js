@@ -3,18 +3,74 @@ export default class CGrid extends HTMLElement{
     constructor(){
         super();
         this.shadow = this.attachShadow({mode:'open'});
+        this.render();        
     }
 
     set data(data){
-        this._data = data;        
-        this.render();
-        
+        this._data = data;       
+        // set default values
+        this.renderColumns();
+        this.entriesPerPage(10);        
     }
 
     get data(){
         return this._data;        
     }
 
+    entriesPerPage(entries = 10){
+        this.startRow = 1;        
+        this.endRow = (this.data.entriesPerPage || entries) <= this.data.rowData.length ? (this.data.entriesPerPage || entries) : this.data.rowData.length;
+        this.renderRows();
+    }    
+
+    
+    renderColumns(){
+        let tHead = this.shadow.querySelector('table thead');        
+        tHead.innerHTML = "";
+        let tHeadTr = document.createElement('tr');
+        tHead.append(tHeadTr);
+        
+        let tFoot = this.shadow.querySelector('table tfoot');
+        tFoot.innerHTML = "";
+        let tFootTr = document.createElement('tr');
+        tFoot.append(tFootTr);
+        
+        this.data.columnDefs.forEach(column => {
+            let thH = document.createElement('th');
+            thH.innerHTML = column.label;
+            thH.className = column.field;
+            tHeadTr.append(thH);
+
+            let thF = document.createElement('th');
+            thF.innerHTML = column.label;
+            thF.className = column.field;
+
+            tFootTr.append(thF);
+        });
+    }
+
+    renderRows(){
+
+        let startIndex = this.startRow - 1;
+        let endIndex = this.endRow - 1;
+
+
+        let tBody = this.shadow.querySelector('table tbody');
+        tBody.innerHTML = "";
+         for(let i=startIndex; i < endIndex; i++){
+            let row = this.data.rowData[i];
+            
+             let tr = document.createElement('tr');
+
+            this.data.columnDefs.forEach((column) => {
+                let td = document.createElement('td');
+                td.innerHTML = row[column.field];
+                tr.append(td);
+            });
+
+            tBody.append(tr); 
+        } 
+    }
 
     render(){
         this.shadow.innerHTML = `
@@ -80,49 +136,7 @@ export default class CGrid extends HTMLElement{
             <tfoot></tfoot>
          </table>
         `;
-
-        this.renderColumns();
-        this.renderRows();
-    }
-    
-    renderColumns(){
-        let tHead = this.shadow.querySelector('table thead');        
-        tHead.innerHTML = "";
-        let tHeadTr = document.createElement('tr');
-        tHead.append(tHeadTr);
         
-        let tFoot = this.shadow.querySelector('table tfoot');
-        tFoot.innerHTML = "";
-        let tFootTr = document.createElement('tr');
-        tFoot.append(tFootTr);
-        
-        this.data.columnDefs.forEach(column => {
-            let thH = document.createElement('th');
-            thH.innerHTML = column.label;
-            thH.className = column.field;
-            tHeadTr.append(thH);
-
-            let thF = document.createElement('th');
-            thF.innerHTML = column.label;
-            thF.className = column.field;
-
-            tFootTr.append(thF);
-        });
-    }
-
-    renderRows(){
-        let tBody = this.shadow.querySelector('table tbody');
-        tBody.innerHTML = "";
-        this.data.rowData.forEach(row => {
-            let tr = document.createElement('tr');
-            this.data.columnDefs.forEach((column) => {
-                let td = document.createElement('td');
-                td.innerHTML = row[column.field];
-                tr.append(td);
-            });
-
-            tBody.append(tr);
-        })
     }
 
 }

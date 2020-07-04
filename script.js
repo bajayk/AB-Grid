@@ -21,5 +21,33 @@ let data = {
     rowData:rows
 }
 
+loadData();
 
-document.querySelector('ab-grid').data = data;
+async function loadData(){
+
+    let response = await fetch('https://restcountries.eu/rest/v2/all');
+    
+    if(response.ok){
+        let json = await response.json();
+        setData(json);
+    }else{
+        console.log(response.status);
+    }
+}
+
+function setData(json){
+
+    let columnDefs = [
+        {label:'Name', field:'name'},
+        {label:'Capital', field:'capital'},
+        {label:'Region', field:'region'},
+        {label:'Population', field:'population'}
+    ];
+
+    let data = {
+        columnDefs:columnDefs,
+        rowData:json
+    }
+    document.querySelector('ab-grid').data = data;
+}
+

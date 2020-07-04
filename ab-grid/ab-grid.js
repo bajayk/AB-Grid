@@ -6,8 +6,9 @@ export default class ABGrid extends HTMLElement{
         super();
         this.shadow = this.attachShadow({mode:'open'});
         this.render();
+        this.addEventListeners();
     }
-
+    
     set data(data){
         this._data = data;        
         this.updateGrid();  
@@ -60,8 +61,17 @@ export default class ABGrid extends HTMLElement{
     }
 
     updateGrid(){
-        let grid = this.shadow.querySelector('c-grid');
-        grid.data = this.data;
+        this.cGrid = this.shadow.querySelector('c-grid');
+        this.cGrid.data = this.data;
+    }
+
+    addEventListeners(){
+        this.shadow.querySelector('.cmb-entries').addEventListener('change', (e)=>this.onEntriesChange(e));
+    }
+
+    onEntriesChange(e){
+        let entries = e.target.value;
+        this.cGrid.entriesPerPage(parseInt(entries));
     }
 
 }
