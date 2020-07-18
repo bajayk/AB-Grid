@@ -5,6 +5,7 @@ export default class ABGrid extends HTMLElement{
     constructor(){
         super();
         this.shadow = this.attachShadow({mode:'open'});
+        this._data = [];
         this.render();
         this.addEventListeners();
     }
@@ -51,7 +52,7 @@ export default class ABGrid extends HTMLElement{
                     <span>entries</span>
                 </div>
                 <div class="search">
-                    Search: <input type="text" />
+                    Search: <input class="input-search" type="text" />
                 </div>
             </div>
             <c-grid></c-grid>
@@ -67,11 +68,19 @@ export default class ABGrid extends HTMLElement{
 
     addEventListeners(){
         this.shadow.querySelector('.cmb-entries').addEventListener('change', (e)=>this.onEntriesChange(e));
+        this.shadow.querySelector('.input-search').addEventListener('input', (e)=>this.onInputSearch(e));
     }
 
     onEntriesChange(e){
         let entries = e.target.value;
         this.cGrid.entriesPerPage(parseInt(entries));
+    }
+
+    onInputSearch(e){
+        let query = e.target.value.toLowerCase();
+        
+        this.cGrid.filter(query);
+        
     }
 
 }

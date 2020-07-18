@@ -8,6 +8,7 @@ export default class CGrid extends HTMLElement{
 
     set data(data){
         this._data = data;       
+        this._rowData = this._data.rowData;
         // set default values
         this.renderColumns();
         this.entriesPerPage(10);        
@@ -23,7 +24,25 @@ export default class CGrid extends HTMLElement{
         this.renderRows();
     }    
 
+    filter(query){
+        query = query.toLowerCase();
+        this._rowData = this.data.rowData.filter(ele => {
+            
+            return (
+                ele.name.toLowerCase().indexOf(query) > -1 ||
+                ele.capital.toLowerCase().indexOf(query) > -1 ||
+                ele.region.toLowerCase().indexOf(query) > -1 ||
+                ele.population.toString().toLowerCase().indexOf(query) > -1
+                );
+        });
+
+        console.log(this._rowData);
+
+        this.renderRows();
+    }
     
+    
+
     renderColumns(){
         let tHead = this.shadow.querySelector('table thead');        
         tHead.innerHTML = "";
@@ -52,13 +71,19 @@ export default class CGrid extends HTMLElement{
     renderRows(){
 
         let startIndex = this.startRow - 1;
-        let endIndex = this.endRow - 1;
+        let endIndex;
+        if(this.endRow <= this._rowData.length){
+            endIndex = this.endRow - 1;
+        }else{
+            endIndex = this._rowData.length - 1;
+        }
+
 
 
         let tBody = this.shadow.querySelector('table tbody');
         tBody.innerHTML = "";
-         for(let i=startIndex; i < endIndex; i++){
-            let row = this.data.rowData[i];
+         for(let i=startIndex; i <= endIndex; i++){
+            let row = this._rowData[i];
             
              let tr = document.createElement('tr');
 
