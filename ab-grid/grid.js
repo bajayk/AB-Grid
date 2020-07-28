@@ -26,18 +26,15 @@ export default class CGrid extends HTMLElement{
 
     filter(query){
         query = query.toLowerCase();
-        this._rowData = this.data.rowData.filter(ele => {
-            
-            return (
-                ele.name.toLowerCase().indexOf(query) > -1 ||
-                ele.capital.toLowerCase().indexOf(query) > -1 ||
-                ele.region.toLowerCase().indexOf(query) > -1 ||
-                ele.population.toString().toLowerCase().indexOf(query) > -1
-                );
-        });
+        this._rowData = this.data.rowData.filter(row => {
 
-        console.log(this._rowData);
+                return this.data.columnDefs.reduce((boolean, column) => {                    
+                    let field = row[column.field];                    
+                    return boolean || field.toString().toLowerCase().indexOf(query) > -1;
+                    
+                }, false);           
 
+        });    
         this.renderRows();
     }
     
