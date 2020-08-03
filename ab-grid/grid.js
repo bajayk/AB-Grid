@@ -11,7 +11,8 @@ export default class CGrid extends HTMLElement{
         this._rowData = this._data.rowData;
         // set default values
         this.renderColumns();
-        this.entriesPerPage(10);        
+        this.entriesPerPage(10);     
+
     }
 
     get data(){
@@ -21,6 +22,7 @@ export default class CGrid extends HTMLElement{
     entriesPerPage(entries = 10){
         this.startRow = 1;        
         this.endRow = (this.data.entriesPerPage || entries) <= this.data.rowData.length ? (this.data.entriesPerPage || entries) : this.data.rowData.length;
+        this.dispatchEventOnUpdate();
         this.renderRows();
     }    
 
@@ -34,7 +36,8 @@ export default class CGrid extends HTMLElement{
                     
                 }, false);           
 
-        });    
+        });  
+        this.dispatchEventOnUpdate();  
         this.renderRows();
     }
     
@@ -159,6 +162,15 @@ export default class CGrid extends HTMLElement{
          </table>
         `;
         
+    }
+
+    dispatchEventOnUpdate(){
+        let event = new CustomEvent("update", {
+            detail:{
+                data:this._rowData
+            }
+        });
+        this.dispatchEvent(event);
     }
 
 }

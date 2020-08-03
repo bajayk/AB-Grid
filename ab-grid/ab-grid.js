@@ -6,7 +6,12 @@ export default class ABGrid extends HTMLElement{
         super();
         this.shadow = this.attachShadow({mode:'open'});
         this._data = [];
+        this.init();
+    }
+
+    init(){
         this.render();
+        this.cGrid = this.shadow.querySelector('c-grid');
         this.addEventListeners();
     }
     
@@ -61,14 +66,14 @@ export default class ABGrid extends HTMLElement{
         `;           
     }
 
-    updateGrid(){
-        this.cGrid = this.shadow.querySelector('c-grid');
+    updateGrid(){       
         this.cGrid.data = this.data;
     }
 
     addEventListeners(){
         this.shadow.querySelector('.cmb-entries').addEventListener('change', (e)=>this.onEntriesChange(e));
         this.shadow.querySelector('.input-search').addEventListener('input', (e)=>this.onInputSearch(e));
+        this.cGrid.addEventListener('update', (e)=>this.onGridUpdate(e));
     }
 
     onEntriesChange(e){
@@ -81,6 +86,10 @@ export default class ABGrid extends HTMLElement{
         
         this.cGrid.filter(query);
         
+    }
+
+    onGridUpdate(e){
+        console.log(e.detail.data);
     }
 
 }

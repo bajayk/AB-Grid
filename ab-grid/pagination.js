@@ -3,7 +3,15 @@ export default class CPagination extends HTMLElement{
     constructor(){
         super();
         this.shadow = this.attachShadow({mode:'open'});
+        this.init();
+    }
+    
+    init(){        
         this.render();
+        this.btnPrevious = this.shadow.querySelector('.btn-previous');
+        this.btnNext = this.shadow.querySelector('.btn-next');
+
+        this.addEventListeners();
     }
 
     render(){
@@ -60,6 +68,19 @@ export default class CPagination extends HTMLElement{
             </div>
         </div>
         `;
+    }
+
+    addEventListeners(){
+        this.btnPrevious.addEventListener('click', (e)=>this.onPrevious(e));
+        this.btnNext.addEventListener('click', (e)=>this.onNext(e));
+    }
+
+    onPrevious(e){
+
+    }
+
+    onNext(e){
+        
     }
 
 }
