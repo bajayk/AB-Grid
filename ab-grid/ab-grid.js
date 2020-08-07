@@ -12,11 +12,13 @@ export default class ABGrid extends HTMLElement{
     init(){
         this.render();
         this.cGrid = this.shadow.querySelector('c-grid');
+        this.cPagination = this.shadow.querySelector('c-pagination');
         this.addEventListeners();
     }
     
     set data(data){
-        this._data = data;        
+        this._data = data;   
+        this.entriesPerPage = 10;  
         this.updateGrid();  
     }
 
@@ -74,24 +76,28 @@ export default class ABGrid extends HTMLElement{
         this.shadow.querySelector('.cmb-entries').addEventListener('change', (e)=>this.onEntriesChange(e));
         this.shadow.querySelector('.input-search').addEventListener('input', (e)=>this.onInputSearch(e));
         this.cGrid.addEventListener('update', (e)=>this.onGridUpdate(e));
+        this.cPagination.addEventListener('onPageChange', (e)=>this.onPageChange(e));
     }
 
     onEntriesChange(e){
-        let entries = e.target.value;
-        this.cGrid.entriesPerPage(parseInt(entries));
+        this.entriesPerPage = parseInt(e.target.value);
+        this.cGrid.entriesPerPage(this.entriesPerPage);
     }
 
     onInputSearch(e){
-        let query = e.target.value.toLowerCase();
-        
-        this.cGrid.filter(query);
-        
+        let query = e.target.value.toLowerCase();        
+        this.cGrid.filter(query);        
     }
 
     onGridUpdate(e){
-        console.log(e.detail.data);
+        //console.log(e.detail.data);
+        this.cPagination.generateButtons(e.detail.data, this.entriesPerPage);
     }
 
+
+    onPageChange(e){        
+        this.cGrid.showPage(e.detail.pageno);
+    }
 }
 
 customElements.define('ab-grid', ABGrid);
