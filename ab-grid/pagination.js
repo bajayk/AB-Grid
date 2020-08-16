@@ -23,14 +23,54 @@ export default class CPagination extends HTMLElement{
     addEventListeners(){
         this.btnPrevious.addEventListener('click', (e)=>this.onPrevious(e));
         this.btnNext.addEventListener('click', (e)=>this.onNext(e));
+        this.btnFirst.addEventListener('click', (e)=>this.onFirst(e));
+        this.btnLast.addEventListener('click', (e)=>this.onLast(e));
+    }
+
+
+    onFirst(e){
+        this.shadow.querySelector('.btn.active').classList.remove('active');
+        let pageno = 1;
+        this.shadow.querySelector('.btn[pageno="'+pageno+'"]').classList.add('active');
+        this.dispatchEventOnSelectPage(pageno);
+        this.currentPage = pageno;
+        this.setButtonsVisibility();
+    }
+
+    onLast(e){
+        this.shadow.querySelector('.btn.active').classList.remove('active');
+        let pageno = this.btnsCount;
+        this.shadow.querySelector('.btn[pageno="'+pageno+'"]').classList.add('active');
+        this.dispatchEventOnSelectPage(pageno);
+        this.currentPage = pageno;
+        this.setButtonsVisibility();
     }
 
     onPrevious(e){
 
+        if(this.currentPage === 1){
+            return;
+        }
+
+        this.shadow.querySelector('.btn.active').classList.remove('active');
+        let pageno = this.currentPage - 1;
+        this.shadow.querySelector('.btn[pageno="'+pageno+'"]').classList.add('active');
+        this.dispatchEventOnSelectPage(pageno);
+        this.currentPage = pageno;
+        this.setButtonsVisibility();
     }
 
     onNext(e){
-        
+        if(this.currentPage >= this.btnsCount){
+            return;
+        }
+
+        this.shadow.querySelector('.btn.active').classList.remove('active');
+        let pageno = this.currentPage + 1;
+        this.shadow.querySelector('.btn[pageno="'+pageno+'"]').classList.add('active');
+        this.dispatchEventOnSelectPage(pageno);
+        this.currentPage = pageno;
+        this.setButtonsVisibility();
     }
 
     generateButtons(data, entries){
@@ -38,10 +78,10 @@ export default class CPagination extends HTMLElement{
             ele.parentNode.removeChild(ele);
         });
 
-        let btnsCount = Math.floor(data.length / entries);// No of button counts requirement
+        this.btnsCount = Math.floor(data.length / entries);// No of button counts requirement
         
     
-        for(let i=1; i <= btnsCount; i++){
+        for(let i=1; i <= this.btnsCount; i++){
             let page = document.createElement('div');
             page.classList.add('btn');
             page.classList.add('btn-page');            
@@ -82,12 +122,48 @@ export default class CPagination extends HTMLElement{
     setButtonsVisibility(){
         if(this.currentPage === 1){
             this.btnFirst.classList.add('hide');
-            this.btnPrevious.classList.add('hide');
-            this.dotsPrevious.classList.add('hide');
+            this.btnPrevious.classList.add('hide');            
         }else{
             this.btnFirst.classList.remove('hide');
-            this.btnPrevious.classList.remove('hide');
+            this.btnPrevious.classList.remove('hide');            
+        }
+
+        if(this.currentPage < 4){          
+            this.dotsPrevious.classList.add('hide');
+        }else{           
             this.dotsPrevious.classList.remove('hide');
+        }
+
+        if(this.currentPage >= this.btnsCount){
+            this.btnLast.classList.add('hide');
+            this.btnNext.classList.add('hide');            
+        }else{
+            this.btnLast.classList.remove('hide');
+            this.btnNext.classList.remove('hide');           
+        }
+
+
+        if(this.currentPage >= this.btnsCount - 2){
+           
+            this.dotsNext.classList.add('hide');
+        }else{
+           
+            this.dotsNext.classList.remove('hide');
+        }
+        
+        if(this.btnsCount > 5 && this.currentPage > 2 && this.currentPage < this.btnsCount - 1){
+            
+
+            let btns = this.shadow.querySelectorAll('.btn-page');
+
+            btns.forEach(btn => {
+                btn.classList.add('hide');
+            });
+
+            for(let i=this.currentPage - 3; i < this.currentPage + 2; i++){
+                btns[i].classList.remove('hide');
+            }
+
         }
     }
 
