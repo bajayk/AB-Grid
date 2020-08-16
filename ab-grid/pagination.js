@@ -10,6 +10,10 @@ export default class CPagination extends HTMLElement{
         this.render();
         this.btnPrevious = this.shadow.querySelector('.btn-previous');
         this.btnNext = this.shadow.querySelector('.btn-next');
+        this.btnFirst = this.shadow.querySelector('.btn-first');
+        this.btnLast = this.shadow.querySelector('.btn-last');
+        this.dotsPrevious = this.shadow.querySelector('.dots-previous');
+        this.dotsNext = this.shadow.querySelector('.dots-next');
         this.currentPage = 1;
         this.addEventListeners();
     }
@@ -56,11 +60,13 @@ export default class CPagination extends HTMLElement{
 
             page.addEventListener('click', (e)=>this.onPageClick(e));
 
-            this.btnNext.parentNode.insertBefore(page, this.btnNext);
+            this.dotsNext.parentNode.insertBefore(page, this.dotsNext);
 
         }
 
         this.currentPage = 1;
+
+        this.setButtonsVisibility();
         
     }
 
@@ -70,6 +76,19 @@ export default class CPagination extends HTMLElement{
         let pageno = parseInt(e.target.getAttribute('pageno'));
         this.dispatchEventOnSelectPage(pageno);
         this.currentPage = pageno;
+        this.setButtonsVisibility();
+    }
+
+    setButtonsVisibility(){
+        if(this.currentPage === 1){
+            this.btnFirst.classList.add('hide');
+            this.btnPrevious.classList.add('hide');
+            this.dotsPrevious.classList.add('hide');
+        }else{
+            this.btnFirst.classList.remove('hide');
+            this.btnPrevious.classList.remove('hide');
+            this.dotsPrevious.classList.remove('hide');
+        }
     }
 
     dispatchEventOnSelectPage(pageno){
@@ -87,6 +106,7 @@ export default class CPagination extends HTMLElement{
         this.shadow.innerHTML = `
         <style>
         .pagination{
+            font-size:14px;
             display:flex;
             justify-content:space-between;
             font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
@@ -97,7 +117,8 @@ export default class CPagination extends HTMLElement{
         }
 
         .buttons .btn{
-            padding:8px 15px;
+            
+            padding:4px 8px;
             cursor:pointer;
             margin:2px;       
             box-sizing: border-box;           
@@ -118,12 +139,16 @@ export default class CPagination extends HTMLElement{
             color:black;
         }
 
-        .buttons .btn.hide{
+        .buttons .btn.hide, .buttons .dots.hide{
            display:none;
         }
 
         .page-views{
             padding:8px 0px;
+        }
+
+        .buttons .dots{
+            padding-top:4px;
         }
 
         </style>
@@ -134,10 +159,12 @@ export default class CPagination extends HTMLElement{
             <div class="buttons">
                 <div class="btn btn-first">First</div>
                 <div class="btn btn-previous">Previous</div>
+                <div class="dots dots-previous">...</div>
                 <div class="btn btn-page">1</div>
                 <div class="btn btn-page active">2</div>
                 <div class="btn btn-page">3</div>
                 <div class="btn btn-page">4</div>
+                <div class="dots dots-next">...</div>
                 <div class="btn btn-next">Next</div>
                 <div class="btn btn-last">Last</div>
             </div>

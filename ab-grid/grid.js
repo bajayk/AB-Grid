@@ -12,7 +12,6 @@ export default class CGrid extends HTMLElement{
         // set default values
         this.renderColumns();
         this.entriesPerPage(10);     
-
     }
 
     get data(){
