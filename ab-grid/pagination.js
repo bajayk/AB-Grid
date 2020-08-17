@@ -29,18 +29,18 @@ export default class CPagination extends HTMLElement{
 
 
     onFirst(e){
-        this.shadow.querySelector('.btn.active').classList.remove('active');
+        this.shadow.querySelector('.btn-page.active').classList.remove('active');
         let pageno = 1;
-        this.shadow.querySelector('.btn[pageno="'+pageno+'"]').classList.add('active');
+        this.shadow.querySelector('.btn-page[pageno="'+pageno+'"]').classList.add('active');
         this.dispatchEventOnSelectPage(pageno);
         this.currentPage = pageno;
         this.setButtonsVisibility();
     }
 
     onLast(e){
-        this.shadow.querySelector('.btn.active').classList.remove('active');
+        this.shadow.querySelector('.btn-page.active').classList.remove('active');
         let pageno = this.btnsCount;
-        this.shadow.querySelector('.btn[pageno="'+pageno+'"]').classList.add('active');
+        this.shadow.querySelector('.btn-page[pageno="'+pageno+'"]').classList.add('active');
         this.dispatchEventOnSelectPage(pageno);
         this.currentPage = pageno;
         this.setButtonsVisibility();
@@ -52,9 +52,9 @@ export default class CPagination extends HTMLElement{
             return;
         }
 
-        this.shadow.querySelector('.btn.active').classList.remove('active');
+        this.shadow.querySelector('.btn-page.active').classList.remove('active');
         let pageno = this.currentPage - 1;
-        this.shadow.querySelector('.btn[pageno="'+pageno+'"]').classList.add('active');
+        this.shadow.querySelector('.btn-page[pageno="'+pageno+'"]').classList.add('active');
         this.dispatchEventOnSelectPage(pageno);
         this.currentPage = pageno;
         this.setButtonsVisibility();
@@ -65,9 +65,9 @@ export default class CPagination extends HTMLElement{
             return;
         }
 
-        this.shadow.querySelector('.btn.active').classList.remove('active');
+        this.shadow.querySelector('.btn-page.active').classList.remove('active');
         let pageno = this.currentPage + 1;
-        this.shadow.querySelector('.btn[pageno="'+pageno+'"]').classList.add('active');
+        this.shadow.querySelector('.btn-page[pageno="'+pageno+'"]').classList.add('active');
         this.dispatchEventOnSelectPage(pageno);
         this.currentPage = pageno;
         this.setButtonsVisibility();
@@ -151,7 +151,7 @@ export default class CPagination extends HTMLElement{
             this.dotsNext.classList.remove('hide');
         }
         
-        if(this.btnsCount > 5 && this.currentPage > 2 && this.currentPage < this.btnsCount - 1){
+        if(this.btnsCount > 5 ){ //&& this.currentPage > 2 && this.currentPage < this.btnsCount - 1
             
 
             let btns = this.shadow.querySelectorAll('.btn-page');
@@ -160,7 +160,17 @@ export default class CPagination extends HTMLElement{
                 btn.classList.add('hide');
             });
 
-            for(let i=this.currentPage - 3; i < this.currentPage + 2; i++){
+            let start;
+
+            if(this.currentPage > 2 && this.currentPage <= this.btnsCount - 2){
+                start = this.currentPage - 3;
+            }else if(this.currentPage > this.btnsCount - 2){
+                start = this.btnsCount - 5;
+            }else{
+                start = 0;
+            }
+
+            for(let i=start; i < start + 5; i++){
                 btns[i].classList.remove('hide');
             }
 
